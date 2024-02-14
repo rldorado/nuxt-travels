@@ -9,6 +9,7 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -21,6 +22,20 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ travel.description }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ formatCurrency(travel.price) }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ travel.rating }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <Icon
+                name="mdi:pencil"
+                class="cursor-pointer text-blue-500 hover:text-blue-700"
+                size="24px"
+                @click="$emit('edit', travel)"
+              />
+              <Icon
+                name="mdi:delete"
+                class="cursor-pointer text-red-500 hover:text-red-700 ml-2"
+                size="24px"
+                @click="$emit('delete', travel.id)"
+              />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -30,18 +45,20 @@
 <script setup lang="ts">
 import type Travel from './../interfaces/Travel';
 
-  defineProps({
-    travels: {
-      type: Array as () => Travel[],
-      required: true,
-    },
-  });
+defineProps({
+  travels: {
+    type: Array as () => Travel[],
+    required: true,
+  },
+});
 
-  const formatDate = (date: string): string => {
-    return new Date(date).toLocaleDateString();
-  };
+defineEmits(['edit', 'delete']);
 
-  const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat('en-UK', { style: 'currency', currency: 'EUR' }).format(amount);
-  }
+const formatDate = (date: string): string => {
+  return new Date(date).toLocaleDateString();
+};
+
+const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat('en-UK', { style: 'currency', currency: 'EUR' }).format(amount);
+}
 </script>

@@ -6,6 +6,8 @@
 - [Nuxt 3](https://nuxt.com/docs/getting-started/introduction)
 - [Typescript](https://www.typescriptlang.org/)
 - [Tailwindcss](https://tailwindcss.com/)
+- [Pinia](https://pinia.vuejs.org/)
+- [Iconify](https://iconify.design/) for Nuxt
 
 ## Project description
 

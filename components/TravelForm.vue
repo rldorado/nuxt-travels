@@ -70,7 +70,15 @@
 <script setup lang="ts">  
 import type Travel from '~/interfaces/Travel';
 
-const emits = defineEmits(['save', 'cancel']);
+const props = defineProps({
+  initialTravel: {
+    type: Object as PropType<Travel | null>,
+    required: true
+  }
+})
+
+
+const emits = defineEmits(['save']);
 
 const DEFAULT_EMPTY_TRAVEL: Travel = {
   id: 0,
@@ -93,5 +101,14 @@ const submitForm = () => {
 const cancel = () => {
   travel.value = { ...DEFAULT_EMPTY_TRAVEL };
 };
+
+watchEffect(() => {
+  if (props.initialTravel) {
+    travel.value = { ...props.initialTravel };
+  } else {
+    travel.value = { ...DEFAULT_EMPTY_TRAVEL };
+  }
+})
+
 </script>
   

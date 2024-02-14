@@ -23,6 +23,4 @@ const mockTravels: Travel[] = [
     }
 ];
 
-export default defineEventHandler(() => {
-    return mockTravels;
-});
+export default defineEventHandler(() => mockTravels);
