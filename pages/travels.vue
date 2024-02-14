@@ -15,6 +15,9 @@
                 @save="handleSave"
             />
         </div>
+        <div v-if="successMessage" class="fixed top-0 right-0 p-4 m-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert">
+            {{ successMessage }}
+        </div>
     </div>
 </template>
 
@@ -30,13 +33,17 @@ const travelsStore = useTravelsStore();
 onMounted(fetchTravels);
 
 const travelToEdit = ref<Travel | null>(null);
+const successMessage = ref('');
 
 const handleSave = (travel: Travel) => {
     if (travel.id) {
         travelsStore.updateTravel(travel);
+        successMessage.value = 'Travel updated successfully.'
     } else {
         travelsStore.addTravel(travel);
+        successMessage.value = 'Travel added successfully.'
     }
+    setTimeout(() => successMessage.value = '', 3000);
     travelToEdit.value = null;
 }
 

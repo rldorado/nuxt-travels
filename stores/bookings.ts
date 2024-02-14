@@ -9,5 +9,8 @@ export const useBookingsStore = defineStore('bookings', {
       setBookings(bookings: Booking[]) {
         this.bookings = bookings;
       },
+      addBooking(booking: Booking) {
+        this.bookings.push(booking);
+      }
     }
   });
