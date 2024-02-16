@@ -3,7 +3,7 @@
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" />
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Picture</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dates</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
@@ -12,14 +12,18 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="bg-white divide-y divide-gray-200 text-sm md:text-md">
           <tr v-for="travel in travels" :key="travel.id">
             <td class="px-6 py-3 whitespace-nowrap">
-              <img :src="travel.picture" class="w-10 h-10 rounded-full" />
+              <img 
+                :src="travel.picture"
+                class="w-10 h-10 rounded-full"
+                alt="Travel Image"
+              />
             </td>
             <td class="px-6 py-4 whitespace-nowrap">{{ travel.name }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ formatDate(travel.departureDate) }} - {{ formatDate(travel.returnDate) }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ travel.description }}</td>
+            <td class="px-6 py-4 description">{{ truncateDescription(travel.description) }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ formatCurrency(travel.price) }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ travel.rating }}</td>
             <td class="px-6 py-4 whitespace-nowrap">
@@ -43,7 +47,8 @@
 </template>
   
 <script setup lang="ts">
-import type Travel from './../interfaces/Travel';
+import type Travel from '~/interfaces/Travel';
+import { formatDate, formatCurrency, truncateDescription } from '~/utils/formatters'
 
 defineProps({
   travels: {
@@ -53,12 +58,15 @@ defineProps({
 });
 
 defineEmits(['edit', 'delete']);
-
-const formatDate = (date: string): string => {
-  return new Date(date).toLocaleDateString();
-};
-
-const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('en-UK', { style: 'currency', currency: 'EUR' }).format(amount);
-}
 </script>
+
+<style scoped>
+@media (max-width: 640px) /* TailwindCSS breakpoint for 'sm' */ {
+  .description {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+</style>

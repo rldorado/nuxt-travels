@@ -14,10 +14,10 @@ export function useTravelsApi() {
             travelsStore.setTravels(travelsData.value ?? []);
         } catch (err) {
             error.value = err as Error;
+            console.error('Error fetching travels', err);
         } finally {
             pending.value = false;
         }
-        return [];
     }
 
     fetchTravels();

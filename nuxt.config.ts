@@ -7,4 +7,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-icon'
   ],
+  routeRules: {
+    '/': { redirect: '/travels' }
+  }
 });

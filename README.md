@@ -11,7 +11,7 @@
 
 ## Project description
 
-Travel and booking management system consisting of two pages:
+Travel and booking management system. Backend is mocked within nuxt server routes. App consists of two pages:
 
 1. To manage travels.
 2. To manage bookings.

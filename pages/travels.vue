@@ -5,11 +5,21 @@
         <div v-if="error" class="text-center text-red-600">Failed to load travels.</div>
         <div v-if="!pending && !error">
             <TravelTable
-                :travels="travelsStore.travels"
+                :travels="displayedTravels"
                 @edit="handleEdit"
                 @delete="handleDelete"
             />
-            <h1 class="text-2xl font-bold my-4">Add Travel</h1>
+            <div class="flex justify-center mt-4">
+                <button
+                    v-if="travelsStore.travels.length > displayedTravels.length"
+                    @click="loadMore"
+                    class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                    Load More
+                </button>
+            </div>
+            <hr class="my-4">
+            <h1 class="text-2xl font-bold">Add Travel</h1>
             <TravelForm
                 :initialTravel="travelToEdit"
                 @save="handleSave"
@@ -29,8 +39,6 @@ import { useTravelsStore } from '~/stores/travels';
 const { fetchTravels, pending, error } = useTravelsApi();
 
 const travelsStore = useTravelsStore();
-
-onMounted(fetchTravels);
 
 const travelToEdit = ref<Travel | null>(null);
 const successMessage = ref('');
@@ -53,5 +61,18 @@ const handleEdit = (travel: Travel) => {
 
 const handleDelete = (travelId: number) => {
     travelsStore.removeTravel(travelId);
+}
+
+const LIMIT_PER_PAGE = 10;
+const displayedTravels = ref<Travel[]>([]);
+
+onMounted(async () => {
+    await fetchTravels();
+    displayedTravels.value = travelsStore.fetchTravels(0, LIMIT_PER_PAGE);
+});
+
+const loadMore = async () => {
+    const currentLength = displayedTravels.value.length;
+    displayedTravels.value.push(...travelsStore.fetchTravels(currentLength, LIMIT_PER_PAGE));
 }
 </script>

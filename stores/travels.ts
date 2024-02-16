@@ -6,11 +6,10 @@ export const useTravelsStore = defineStore('travels', {
     travels: [] as Travel[]
   }),
   actions: {
-    setTravels(travelsData: Travel[]) {
-      this.travels = travelsData;
+    setTravels(travels: Travel[]) {
+      this.travels = travels;
     },
     addTravel(travel: Travel) {
-      // INFO: We're assuming ID is automatically generated from API
       this.travels.push(travel);
     },
     removeTravel(travelId: number) {
@@ -21,6 +20,10 @@ export const useTravelsStore = defineStore('travels', {
       if (index !== -1) {
         this.travels[index] = travel;
       }
+    },
+    // INFO: We use 'fetchTravels' to emulate pagination as we don't have pagination in backend
+    fetchTravels(start: number, limit: number) {
+      return this.travels.slice(start, start + limit);
     }
   }
 });

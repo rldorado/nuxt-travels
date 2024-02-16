@@ -14,10 +14,10 @@ export function useBookingsApi() {
             bookingsStore.setBookings(bookingsData.value ?? []);
         } catch (err) {
             error.value = err as Error;
+            console.error('Error fetching bookings', err);
         } finally {
             pending.value = false;
         }
-        return [];
     }
 
     fetchBookings();
