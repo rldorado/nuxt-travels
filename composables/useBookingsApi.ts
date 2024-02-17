@@ -1,5 +1,6 @@
-import type { Booking } from "~/interfaces/Booking";
-import { useBookingsStore } from "~/stores/bookings";
+import { ref } from 'vue';
+import type { Booking } from '~/interfaces/Booking';
+import { useBookingsStore } from '~/stores/bookings';
 
 export function useBookingsApi() {
     const bookingsStore = useBookingsStore();

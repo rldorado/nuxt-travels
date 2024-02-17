@@ -1,32 +1,27 @@
 <template>
-    <div class="mb-4">
+    <div class="space-y-4 mb-4">
         <input
             v-model="filterQuery"
             type="text"
             placeholder="Filter by name..."
             class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-            @input="applyFilters"
+            @input="$emit('updateFilter', filterQuery)"
         />
+        <select
+            v-model="sortOrder"
+            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            @change="$emit('updateSort', sortOrder)"    
+        >
+                <option value="dateAsc">Dates - Soonest First</option>
+                <option value="dateDesc">Dates - Latest First</option>
+                <option value="ratingAsc">Rating - Lowest First</option>
+                <option value="ratingDesc">Rating - Highest First</option>
+        </select>
     </div>
+
 </template>
 
 <script setup lang="ts">
-import type Travel from '~/interfaces/Travel';
-
-const props = defineProps({
-    travels: {
-        type: Array as () => Travel[],
-        required: true
-    }
-});
-
-/** FILTERS */
 const filterQuery = ref<string>('');
-const filteredTravels = ref<Travel[]>([]);
-
-const applyFilters = () => {
-  filteredTravels.value = props.travels.filter((travel: Travel) => {
-    return travel.name.toLowerCase().includes(filterQuery.value.toLowerCase());
-  });
-}
+const sortOrder = ref<string>('dateAsc');
 </script>

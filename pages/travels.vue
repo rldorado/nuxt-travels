@@ -4,20 +4,17 @@
         <div v-if="pending" class="text-center">Loading...</div>
         <div v-if="error" class="text-center text-red-600">Failed to load travels.</div>
         <div v-if="!pending && !error">
+            <TravelFilters @updateFilter="updateFilter" @updateSort="updateSort" />
             <TravelTable
-                :travels="displayedTravels"
+                :travels="paginatedTravels"
                 @edit="handleEdit"
                 @delete="handleDelete"
             />
-            <div class="flex justify-center mt-4">
-                <button
-                    v-if="travelsStore.travels.length > displayedTravels.length"
-                    @click="loadMore"
-                    class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                    Load More
-                </button>
-            </div>
+            <Pagination
+                :totalPages="totalPages"
+                :currentPage="currentPage"
+                @update:currentPage="currentPage = $event"
+            />
             <hr class="my-4">
             <h1 class="text-2xl font-bold">Add Travel</h1>
             <TravelForm
@@ -33,6 +30,7 @@
 
 <script setup lang="ts">
 import { useTravelsApi } from '~/composables/useTravelsApi';
+import { useTravelFilters } from '~/composables/useTravelFilters';
 import type Travel from '~/interfaces/Travel';
 import { useTravelsStore } from '~/stores/travels';
 
@@ -40,8 +38,16 @@ const { fetchTravels, pending, error } = useTravelsApi();
 
 const travelsStore = useTravelsStore();
 
+const {
+    filterQuery,
+    sortOrder,
+    currentPage,
+    totalPages,
+    paginatedTravels
+} = useTravelFilters(travelsStore.travels);
+
 const travelToEdit = ref<Travel | null>(null);
-const successMessage = ref('');
+const successMessage = ref<string>('');
 
 const handleSave = (travel: Travel) => {
     if (travel.id) {
@@ -63,16 +69,15 @@ const handleDelete = (travelId: number) => {
     travelsStore.removeTravel(travelId);
 }
 
-const LIMIT_PER_PAGE = 10;
-const displayedTravels = ref<Travel[]>([]);
-
 onMounted(async () => {
     await fetchTravels();
-    displayedTravels.value = travelsStore.fetchTravels(0, LIMIT_PER_PAGE);
 });
 
-const loadMore = async () => {
-    const currentLength = displayedTravels.value.length;
-    displayedTravels.value.push(...travelsStore.fetchTravels(currentLength, LIMIT_PER_PAGE));
+const updateFilter = (query: string) => {
+    filterQuery.value = query;
+};
+
+const updateSort = (order: string) => {
+    sortOrder.value = order;
 }
 </script>
