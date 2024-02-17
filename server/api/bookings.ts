@@ -1,4 +1,4 @@
-import type { Booking } from "~/interfaces/Booking";
+import type Booking from "~/interfaces/Booking";
 
 import fs from 'fs';
 import path from 'path';

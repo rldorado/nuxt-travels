@@ -1,4 +1,4 @@
-export interface CustomerInfo {
+export default interface CustomerInfo {
     name: string;
     email: string;
     phoneNumber: string;

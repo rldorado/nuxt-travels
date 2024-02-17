@@ -3,18 +3,21 @@
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="w-2/6 min-w-[160px] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Travel Info
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="w-2/6 min-w-[160px] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Customer Info
             </th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" class="w-1/6 min-w-[120px] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Payment Type
+            </th>
+            <th scope="col" class="w-2/6 min-w-[160px] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Notes
             </th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="bg-white divide-y divide-gray-200 text-sm md:text-md">
           <tr v-for="booking in bookings" :key="booking.id">
             <td class="px-6 py-4 whitespace-nowrap">
                 <div
@@ -42,6 +45,9 @@
               <Icon :name="getPaymentTypeIcon(booking.paymentType)" size="24px" />
               <span class="pl-2">{{ booking.paymentType }}</span>
             </td>
+            <td class="px-6 py-4 notes">
+              <span v-if="booking.notes">{{ truncateText(booking.notes) }}</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -50,9 +56,10 @@
   
 <script setup lang="ts">
 import { PaymentTypes } from '~/enums/PaymentTypes';
-import type { Booking } from '~/interfaces/Booking';
+import type Booking from '~/interfaces/Booking';
 import type Travel from '~/interfaces/Travel';
 import { useTravelsStore } from '~/stores/travels';
+import { truncateText } from '~/utils/formatters';
 
 defineProps({
   bookings: {
@@ -81,3 +88,12 @@ const getPaymentTypeIcon = (paymentType: string): string => {
 }
 
 </script>
+
+<style scoped>
+@media (max-width: 640px) /* TailwindCSS breakpoint for 'sm' */ {
+  .notes {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+</style>

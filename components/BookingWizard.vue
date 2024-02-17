@@ -32,8 +32,14 @@
                 <div class="flex flex-col space-y-4">
                     <input v-model="customerInfo.name" placeholder="Name" class="border p-2" />
                     <input v-model="customerInfo.email" placeholder="Email" class="border p-2" />
-                    <input v-model="customerInfo.phoneNumber" placeholder="Phone" class="border p-2" />
-                    <input v-model="customerInfo.age" placeholder="Age" class="border p-2" />
+                    <input
+                        v-model="customerInfo.phoneNumber"
+                        type="tel"
+                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}"
+                        placeholder="Phone"
+                        class="border p-2"
+                    />
+                    <input v-model="customerInfo.age" placeholder="Age" min="18" class="border p-2" />
                     <input v-model="customerInfo.gender" placeholder="Gender" class="border p-2" />
                 </div>
                 <div class="mt-3 text-center">
@@ -84,15 +90,13 @@
 </template>
 
 <script setup lang="ts">
-import type { Booking } from '~/interfaces/Booking';
-import type { CustomerInfo } from '~/interfaces/CustomerInfo';
+import type Booking from '~/interfaces/Booking';
+import type CustomerInfo from '~/interfaces/CustomerInfo';
 import type Travel from '~/interfaces/Travel';
 import { useTravelsStore } from '~/stores/travels';
-import { useBookingsStore } from '~/stores/bookings';
 import { PaymentTypes } from '~/enums/PaymentTypes';
 
 const travelsStore = useTravelsStore();
-const { addBooking } = useBookingsStore();
 
 defineProps({
     showModal: {
@@ -112,7 +116,7 @@ const DEFAULT_EMPTY_BOOKING: Booking = {
         name: '',
         email: '',
         phoneNumber: '',
-        age: 0,
+        age: 18,
         gender: ''
     },
     paymentType: PaymentTypes.CREDIT_TRANSFER,
@@ -142,6 +146,7 @@ const selectTravel = (id: number) => {
 };
 
 /** STEP 2 **/
+
 const customerInfo = ref<CustomerInfo>({
     name: '',
     email: '',
@@ -164,6 +169,7 @@ const validateCustomerInfo = () => {
 }
 
 /** STEP 3 **/
+
 const submitForm = () => {
     if (selectedTravel.value) {
         bookingToAdd.value = { 

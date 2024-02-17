@@ -20,12 +20,15 @@
             />
         </div>
         <hr class="my-4">
-        <button
-            @click="openBookingWizard"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-            + Add Booking
-        </button>
+        <div class="flex justify-center">
+            <button
+                @click="openBookingWizard"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+                + Add Booking
+            </button>
+        </div>
+        
         <div v-if="showSuccessMessage" class="fixed top-0 right-0 p-4 m-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert">
             Booking successfully added.
         </div>
@@ -35,7 +38,7 @@
 <script setup lang="ts">
 import { useBookingsApi } from '~/composables/useBookingsApi';
 import { useTravelsApi } from '~/composables/useTravelsApi';
-import type { Booking } from '~/interfaces/Booking';
+import type Booking from '~/interfaces/Booking';
 import { useBookingsStore } from '~/stores/bookings';
 
 const { fetchBookings, pending, error } = useBookingsApi();
@@ -52,11 +55,12 @@ const openBookingWizard = () => {
 
 const handleSave = (booking: Booking) => {
     bookingsStore.addBooking(booking);
+    displayedBookings.value.unshift(booking);
     showSuccessMessage.value = true;
     setTimeout(() => showSuccessMessage.value = false, 3000);
 }
 
-const LIMIT_PER_PAGE = 10;
+const LIMIT_PER_PAGE = 5;
 const displayedBookings = ref<Booking[]>([]);
 
 onMounted(async () => {

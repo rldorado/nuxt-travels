@@ -45,38 +45,37 @@ const props = defineProps({
 const emit = defineEmits(['update:currentPage']);
 
 const MAX_PAGES_SHOWN = 5;
+const SIDE_PAGES = 1;
 
 const paginationRange = computed(() => {
-    let range: (number | string)[] = [];
+    const range = [];
+    
     if (props.totalPages <= MAX_PAGES_SHOWN) {
         for (let i = 1; i <= props.totalPages; i++) {
             range.push(i);
         }
     } else {
-        const startPages = [1, 2];
-        const endPages = [props.totalPages - 1, props.totalPages];
-        const currentPageIndex = props.currentPage - 1;
-
-        range = [props.currentPage];
-        let count = 1;
-
-        while (range.length < MAX_PAGES_SHOWN) {
-        if (currentPageIndex - count >= 1) {
-            range.unshift(currentPageIndex - count + 1);
-        }
-        if (currentPageIndex + count <= props.totalPages) {
-            range.push(currentPageIndex + count + 1);
-        }
-        count++;
-        }
-
-        if (range[1] !== 2) range.splice(1, 0, '...');
-        if (range[range.length - 2] !== props.totalPages - 1) range.splice(range.length - 1, 0, '...');
+        let start = Math.max(props.currentPage - SIDE_PAGES, 2);
+        let end = Math.min(props.currentPage + SIDE_PAGES, props.totalPages - 1);
         
-        range = Array.from(new Set([...startPages, ...range, ...endPages])).sort((a, b) => a - b);
+        range.push(1);
+        
+        if (start > 2) {
+            range.push('...');
+        }
+
+        for (let i = start; i <= end; i++) {
+            range.push(i);
+        }
+
+        if (end < props.totalPages - 1) {
+            range.push('...');
+        }
+
+        range.push(props.totalPages);
     }
 
-    return range.filter((page, index, self) => self.indexOf(page) === index);
+    return range;
 });
 
 const updatePage = (page: number | string) => {

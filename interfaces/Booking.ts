@@ -1,7 +1,7 @@
 import type { PaymentType } from "~/enums/PaymentTypes";
-import type { CustomerInfo } from "./CustomerInfo";
+import type CustomerInfo from "./CustomerInfo";
 
-export interface Booking {
+export default interface Booking {
     id: number;
     travelId: number;
     customerInfo: CustomerInfo;

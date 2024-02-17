@@ -1,15 +1,17 @@
 import { computed, ref } from 'vue';
-import type { Travel } from '~/interfaces/Travel';
+import { useTravelsStore } from '~/stores/travels';
 
-const TRAVELS_PER_PAGE = 10;
+const TRAVELS_PER_PAGE = 5;
 
-export function useTravelFilters(initialTravels: Travel[]) {
+export function useTravelFilters() {
     const filterQuery = ref('');
     const sortOrder = ref('');
     const currentPage = ref(1);
+    const travelsStore = useTravelsStore();
+    const initialTravels = computed(() => travelsStore.travels);
 
     const filteredTravels = computed(() => {
-        let result = initialTravels.filter(
+        let result = initialTravels.value.filter(
             (item) => item.name.toLowerCase().includes(filterQuery.value.toLowerCase())
         );
 

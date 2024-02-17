@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { Booking } from '~/interfaces/Booking';
+import type Booking from '~/interfaces/Booking';
 
 export const useBookingsStore = defineStore('bookings', {
     state: () => ({

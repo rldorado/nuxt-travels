@@ -4,7 +4,10 @@
         <div v-if="pending" class="text-center">Loading...</div>
         <div v-if="error" class="text-center text-red-600">Failed to load travels.</div>
         <div v-if="!pending && !error">
-            <TravelFilters @updateFilter="updateFilter" @updateSort="updateSort" />
+            <TravelFilters
+                @updateFilter="updateFilter"
+                @updateSort="updateSort"
+            />
             <TravelTable
                 :travels="paginatedTravels"
                 @edit="handleEdit"
@@ -16,7 +19,8 @@
                 @update:currentPage="currentPage = $event"
             />
             <hr class="my-4">
-            <h1 class="text-2xl font-bold">Add Travel</h1>
+            <h1 v-if="travelToEdit" class="text-2xl font-bold">Update Travel</h1>
+            <h1 v-else class="text-2xl font-bold">Add Travel</h1>
             <TravelForm
                 :initialTravel="travelToEdit"
                 @save="handleSave"
@@ -44,18 +48,18 @@ const {
     currentPage,
     totalPages,
     paginatedTravels
-} = useTravelFilters(travelsStore.travels);
+} = useTravelFilters();
 
 const travelToEdit = ref<Travel | null>(null);
 const successMessage = ref<string>('');
 
 const handleSave = (travel: Travel) => {
-    if (travel.id) {
+    if (travelToEdit.value) {
         travelsStore.updateTravel(travel);
-        successMessage.value = 'Travel updated successfully.'
+        successMessage.value = 'Travel updated successfully.';
     } else {
         travelsStore.addTravel(travel);
-        successMessage.value = 'Travel added successfully.'
+        successMessage.value = 'Travel added successfully.';
     }
     setTimeout(() => successMessage.value = '', 3000);
     travelToEdit.value = null;
@@ -67,6 +71,8 @@ const handleEdit = (travel: Travel) => {
 
 const handleDelete = (travelId: number) => {
     travelsStore.removeTravel(travelId);
+    successMessage.value = 'Travel removed successfully.';
+    setTimeout(() => successMessage.value = '', 3000);
 }
 
 onMounted(async () => {

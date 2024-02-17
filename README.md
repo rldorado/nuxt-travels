@@ -8,6 +8,7 @@
 - [Tailwindcss](https://tailwindcss.com/)
 - [Pinia](https://pinia.vuejs.org/)
 - [Iconify](https://iconify.design/) for Nuxt
+- [Vitest](https://vitest.dev/) for testing purposes
 
 ## Project description
 
@@ -15,6 +16,8 @@ Travel and booking management system. Backend is mocked within nuxt server route
 
 1. To manage travels.
 2. To manage bookings.
+
+Mock data has been provided by local JSON files.
 
 #### Travels
 
@@ -32,6 +35,8 @@ Travel's page consists on a table and some basic filters. The user is able to:
 1. Use a form to add a new travel.
 2. Edit an existing travel.
 3. Delete a travel.
+4. Search travels by name
+5. Order travels by soonest/latest or by rating
 
 #### Bookings
 
